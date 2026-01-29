@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<script src="config.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ne Oynasam? | Elite Game Picker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <div class="app-container">
+        <main class="wheel-section">
+            <h1 class="logo">NE OYNASAM?</h1>
+            <div class="wheel-container">
+                <div class="wheel-pointer">▼</div>
+                <canvas id="wheelCanvas" width="800" height="800"></canvas>
+            </div>
+            <div class="controls-area">
+                <div class="controls-row">
+                    <select id="platform-select">
+                        <option value="4">PC (Windows)</option>
+                        <option value="187">PS5</option>
+                        <option value="186">Xbox Series X</option>
+                        <option value="7">Switch</option>
+                    </select>
+                    <select id="genre-select">
+                        <option value="">Tüm Türler</option>
+                        <option value="action">Aksiyon</option>
+                        <option value="role-playing-games-rpg">RPG</option>
+                        <option value="shooter">Nişancı</option>
+                        <option value="adventure">Macera</option>
+                        <option value="strategy">Strateji</option>
+                        <option value="indie">Bağımsız (Indie)</option>
+                    </select>
+                </div>
+                <button id="spin-button" class="spin-btn">ÇEVİR</button>
+            </div>
+        </main>
+    </div>
+    <div id="game-modal" class="modal">
+        <div id="modal-body"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
