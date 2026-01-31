@@ -11,7 +11,7 @@ Kararsız oyuncular için geliştirilmiş, modern ve dinamik bir oyun seçim pla
 Burada uygulamanın nasıl göründüğüne dair görseller yer almaktadır:
 | 1. Ana Ekran (Çark)
 <img width="1918" height="882" alt="Ekran görüntüsü 2026-01-31 212845" src="https://github.com/user-attachments/assets/f052439b-c354-4b85-a788-1ac69933bf04" />
-| 2. Filtreleme Alanı
+| 2.İntro 
 <img width="1918" height="887" alt="a" src="https://github.com/user-attachments/assets/bb95be62-fef4-4521-b60c-aef5ebaf6906" />
 3. Oyun Detay Kartı |
 <img width="1918" height="925" alt="Ekran görüntüsü 2026-01-31 212831" src="https://github.com/user-attachments/assets/3912ac98-b7a4-4f13-8b14-386bc9904680" />
