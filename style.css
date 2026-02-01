@@ -1,3 +1,4 @@
+
 :root { 
     --bg-color: #000000; 
     --neon-blue: #00f2ff; 
@@ -36,6 +37,49 @@ body {
     pointer-events: none;
     transition: opacity 1s ease-out;
 }
+
+
+.background-container {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -4;
+    background: #000;
+    overflow: hidden;
+}
+
+#nebulaVideo {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: -3;
+    opacity: 0.6;
+    filter: brightness(0.7) saturate(1.2) contrast(1.1);
+    pointer-events: none;
+}
+
+#spaceCanvas {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -2;
+    pointer-events: none;
+}
+
+.bg-ambient-light {
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 200vw; height: 200vh;
+    transform: translate(-50%, -50%);
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(188, 19, 254, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 0%, #000 100%);
+    z-index: -1;
+    filter: blur(100px);
+    mix-blend-mode: screen;
+    animation: nebulaMove 30s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
 
 .app-container {
     position: relative;
@@ -90,6 +134,26 @@ body {
     pointer-events: none;
 }
 
+
+.loading-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 102%; height: 102%;
+    margin-top: -51%; margin-left: -51%;
+    border: 6px solid transparent;
+    border-top: 6px solid var(--neon-blue);
+    border-right: 6px solid var(--neon-purple);
+    border-radius: 50%;
+    z-index: 5;
+    display: none;
+    pointer-events: none;
+    box-shadow: 0 0 20px var(--neon-blue), inset 0 0 20px var(--neon-purple);
+    animation: neon-spin 1s linear infinite;
+}
+
+.is-loading .loading-ring { display: block; }
+
+
 .controls-area {
     display: flex;
     flex-direction: column;
@@ -98,10 +162,7 @@ body {
     margin-top: 20px;
 }
 
-.controls-row { 
-    display: flex; 
-    gap: 15px; 
-}
+.controls-row { display: flex; gap: 15px; }
 
 select { 
     background: rgba(17, 17, 17, 0.8); 
@@ -144,36 +205,50 @@ select:hover {
     background: #333;
     opacity: 0.5;
     cursor: not-allowed;
-    box-shadow: none;
 }
+
+
+.error-toast {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 0, 0, 0.9);
+    border: 2px solid #ff0055;
+    box-shadow: 0 0 20px #ff0055;
+    padding: 15px 25px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 10000;
+    transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.error-toast.show { bottom: 30px; }
 
 @keyframes logoEfekt {
     0% { transform: scale(0.5); opacity: 0; filter: blur(10px); }
     100% { transform: scale(1); opacity: 1; filter: blur(0); }
 }
 
-/* VFX & ANIMATIONS */
-.flash-effect {
-    animation: flash 0.5s ease-out;
+@keyframes neon-spin {
+    0% { transform: rotate(0deg); filter: hue-rotate(0deg) drop-shadow(0 0 10px var(--neon-blue)); }
+    100% { transform: rotate(360deg); filter: hue-rotate(360deg) drop-shadow(0 0 25px var(--neon-purple)); }
 }
 
-@keyframes flash {
-    0% { background: rgba(0, 242, 255, 0.4); }
-    100% { background: transparent; }
+@keyframes nebulaMove {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-48%, -52%) rotate(5deg); }
 }
 
-.wheel-winner-active {
-    filter: drop-shadow(0 0 20px var(--neon-blue)) contrast(1.2);
-    transform: scale(1.02);
-}
 
-.shake {
-    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-}
-
-@keyframes shake {
-    10%, 90% { transform: translate3d(-1px, 0, 0); }
-    20%, 80% { transform: translate3d(2px, 0, 0); }
-    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-    40%, 60% { transform: translate3d(4px, 0, 0); }
+@media (max-width: 650px) {
+    .wheel-container {
+        width: 320px;
+        height: 320px;
+    }
+    .logo { font-size: 1.5rem; letter-spacing: 2px; }
+    .controls-row { flex-direction: column; width: 90%; }
+    .spin-btn { padding: 15px 50px; font-size: 1.1rem; width: 90%; }
 }

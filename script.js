@@ -31,6 +31,55 @@ window.onload = () => {
     }, 2500);
 };
 
+const spaceCanvas = document.getElementById('spaceCanvas');
+const sCtx = spaceCanvas.getContext('2d');
+let stars = [];
+let uzayHizi = 0.0005; // Normal akış hızı
+
+function resizeSpace() {
+    spaceCanvas.width = window.innerWidth;
+    spaceCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeSpace);
+resizeSpace();
+
+// Yıldızları oluştur
+for (let i = 0; i < 400; i++) {
+    stars.push({
+        x: Math.random() * 2 - 1,
+        y: Math.random() * 2 - 1,
+        size: Math.random() * 1.5,
+        color: Math.random() > 0.5 ? "#00f2ff" : "#bc13fe"
+    });
+}
+
+function spaceAnimate() {
+    
+    sCtx.clearRect(0, 0, spaceCanvas.width, spaceCanvas.height);
+    const cx = spaceCanvas.width / 2;
+    const cy = spaceCanvas.height / 2;
+    const radius = Math.max(cx, cy);
+
+    stars.forEach(s => {
+        // Yıldızları döndür
+        const angle = uzayHizi;
+        const x = s.x * Math.cos(angle) - s.y * Math.sin(angle);
+        const y = s.y * Math.cos(angle) + s.x * Math.sin(angle);
+        s.x = x;
+        s.y = y;
+
+        const px = x * radius + cx;
+        const py = y * radius + cy;
+
+        sCtx.beginPath();
+        sCtx.arc(px, py, s.size, 0, Math.PI * 2);
+        sCtx.fillStyle = s.color;
+        sCtx.fill();
+    });
+    requestAnimationFrame(spaceAnimate);
+}
+spaceAnimate();
+
 function varsayilanCarkiYukle() {
     dinamikOyunlar = Array(8).fill(null).map((_, i) => ({
         ad: "NE OYNASAM?",
@@ -89,61 +138,135 @@ function merkezLogoyuCiz() {
 }
 
 async function oyunlariTazeleVeDon() {
+    const container = document.querySelector('.wheel-container');
+    
+    // 1. Başlangıç Durumu
+    container.classList.add('is-loading'); 
+    uzayHizi = 0.08; // Galaksiyi ateşle
     spinBtn.disabled = true; 
     spinBtn.innerText = "YÜKLENİYOR...";
     
+    const rastgeleSayfa = Math.floor(Math.random() * 5) + 1; 
     const yearFilter = yearSelect.value ? `&dates=${yearSelect.value}` : '';
     const ordering = orderingSelect.value || '-added';
     const genreFilter = genreSelect.value ? `&genres=${genreSelect.value}` : '';
-    const url = `https://api.rawg.io/api/games?key=${API_KEY}&platforms=${platformSelect.value}${genreFilter}${yearFilter}&ordering=${ordering}&metacritic=70,100&page_size=12&page=1`;
+    
+    const url = `https://api.rawg.io/api/games?key=${API_KEY}&platforms=${platformSelect.value}${genreFilter}${yearFilter}&ordering=${ordering}&page_size=15&page=${rastgeleSayfa}`;
     
     try {
         const res = await fetch(url);
         const data = await res.json();
         
-        if (data.results && data.results.length > 0) {
-            dinamikOyunlar = data.results.map((o, i) => ({ 
+        if (data.results && data.results.length > 5) {
+            // Veriyi işle
+            const karisikSonuclar = data.results
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 12);
+
+            dinamikOyunlar = karisikSonuclar.map((o, i) => ({ 
                 ad: o.name, 
                 id: o.slug, 
                 renk: markaRenkleri[i % 2] 
             }));
             
             carkiCiz();
+            container.classList.remove('is-loading'); // Neon halkayı durdur
+
             if (typeof startSpinAudio === "function") startSpinAudio();
 
+            // 2. Çark Dönüşü Animasyonu
             const donus = Math.floor(Math.random() * 360) + 2160; 
             mevcutDerece += donus;
             canvas.style.transform = `rotate(${mevcutDerece}deg)`;
 
+            // 3. Çark Durduğunda (4 Saniye Sonra)
             setTimeout(() => {
                 if (typeof stopSpinAudio === "function") stopSpinAudio();
                 
+                // UZAYI KADEMELİ YAVAŞLAT
+                let yavaslatmaEfekti = setInterval(() => {
+                    if (uzayHizi > 0.0005) {
+                        uzayHizi -= 0.002;
+                    } else {
+                        uzayHizi = 0.0005;
+                        clearInterval(yavaslatmaEfekti);
+                    }
+                }, 30);
+
+                // Görsel Efektler (Sarsılma ve Konfeti Kaldırıldı)
                 document.body.classList.add('flash-effect');
-                canvas.classList.add('shake', 'wheel-winner-active');
+                canvas.classList.add('wheel-winner-active');
                 
                 setTimeout(() => {
                     document.body.classList.remove('flash-effect');
-                    canvas.classList.remove('shake');
                 }, 500);
 
+                // Butonu ve Arayüzü Aktif Et
                 spinBtn.disabled = false; 
                 spinBtn.innerText = "ÇEVİR";
                 
+                // Kazananı Belirle
                 const normalize = (mevcutDerece % 360);
                 const index = Math.floor(((270 - normalize + 360) % 360) / (360 / dinamikOyunlar.length));
                 
-                konfetiPatlat();
                 detayGetir(dinamikOyunlar[index].id);
             }, 4000);
+
+        } 
+        else if (rastgeleSayfa > 1) {
+            // Eğer rastgele sayfa boşsa 1. sayfayı dene (Rekürsif çağrı yerine direkt fonksiyon)
+            return varsayilanSayfaIleDene(); 
+        } 
+        else {
+            throw new Error("Oyun bulunamadı");
+        }
+    } catch (e) { 
+     
+        uzayHizi = 0.0005;
+        container.classList.remove('is-loading');
+        spinBtn.disabled = false; 
+        spinBtn.innerText = "YENİDEN DENE";
+        ozelHataGoster("Kriterlere uygun oyun bulunamadı.");
+    }
+}
+
+async function varsayilanSayfaIleDene() {
+    const genreFilter = genreSelect.value ? `&genres=${genreSelect.value}` : '';
+    const yearFilter = yearSelect.value ? `&dates=${yearSelect.value}` : '';
+    const url = `https://api.rawg.io/api/games?key=${API_KEY}&platforms=${platformSelect.value}${genreFilter}${yearFilter}&page_size=12&page=1`;
+    
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if(data.results && data.results.length > 0) {
+            dinamikOyunlar = data.results.map((o, i) => ({ 
+                ad: o.name, 
+                id: o.slug, 
+                renk: markaRenkleri[i % 2] 
+            }));
+            carkiCiz();
+
+            spinBtn.disabled = false;
+            spinBtn.innerText = "ÇEVİR";
+            ozelHataGoster("Sayfa 1'den veriler yüklendi, tekrar çevirin!");
         } else {
-            alert("Sonuç bulunamadı!");
+            ozelHataGoster("Maalesef hiç oyun bulunamadı.");
             spinBtn.disabled = false;
             spinBtn.innerText = "ÇEVİR";
         }
-    } catch (e) { 
-        spinBtn.disabled = false; 
-        spinBtn.innerText = "HATA!";
-        console.error(e);
+    } catch(e) {
+        spinBtn.disabled = false;
+        spinBtn.innerText = "ÇEVİR";
+    }
+}
+
+function ozelHataGoster(mesaj) {
+    const toast = document.getElementById('error-toast');
+    if(toast) {
+        const msgSpan = toast.querySelector('.error-msg');
+        msgSpan.innerText = mesaj;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
     }
 }
 
@@ -190,7 +313,7 @@ async function detayGetir(slug) {
                     <div class="independent-card">
                         <div class="panel-header"><i class="fa-solid fa-microchip"></i> SİSTEM</div>
                         <div class="req-text">
-                            ${game.platforms?.find(p => p.platform.id === 4)?.requirements?.minimum || "Detay yok."}
+                            ${game.platforms?.find(p => p.platform.id === 4)?.requirements?.minimum || "Sistem gereksinimi belirtilmemiş."}
                         </div>
                     </div>
                     <div class="independent-card center-card">
@@ -215,7 +338,7 @@ async function detayGetir(slug) {
         `;
         modal.style.display = "flex";
     } catch (err) {
-        console.error("Hata:", err);
+        ozelHataGoster("Oyun detayları yüklenirken bir hata oluştu.");
     }
 }
 

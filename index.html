@@ -4,24 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ne Oynasam? | Elite Game Picker</title>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="background.css"> 
-    <link rel="stylesheet" href="style.css">      
-    <link rel="stylesheet" href="modal.css">
     
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="config.js"></script>
+<link rel="stylesheet" href="modal.css">
 </head>
 <body>
 
-    <div class="bg-glow-container"></div>
-    <div class="bg-ambient-light"></div>
+    <div class="background-container">
+        <video id="nebulaVideo" autoplay muted loop playsinline>
+            <source src="nebula.mp4" type="video/mp4">
+        </video>
+        <canvas id="spaceCanvas"></canvas>
+        <div class="bg-ambient-light"></div>
+    </div>
 
     <div id="intro-screen">
-        <img src="logo.png" id="intro-logo" alt="Ne Oynasam Logo">
+        <img src="logo.png" id="intro-logo" alt="Logo">
     </div>
 
     <div class="app-container">
@@ -29,60 +30,61 @@
             <h1 class="logo">NE OYNASAM?</h1>
             
             <div class="wheel-container">
+                <div id="loading-ring" class="loading-ring"></div>
                 <div class="wheel-pointer">▼</div>
                 <canvas id="wheelCanvas" width="800" height="800"></canvas>
             </div>
 
-            <div class="controls-area">
+            <div id="error-toast" class="error-toast">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div class="error-content">
+                    <span class="error-title">SİSTEM HATASI</span>
+                    <span class="error-msg">Oyun bulunamadı!</span>
+                </div>
+            </div>
+
+           <div class="controls-area">
                 <div class="controls-row">
                     <select id="platform-select">
                         <option value="4">PC (Windows)</option>
                         <option value="187">PS5</option>
+                        <option value="18">PS4</option>
                         <option value="186">Xbox Series X</option>
-                        <option value="18">PlayStation 4</option>
                         <option value="1">Xbox One</option>
                         <option value="7">Nintendo Switch</option>
                     </select>
-
                     <select id="genre-select">
                         <option value="">Tüm Türler</option>
                         <option value="action">Aksiyon</option>
                         <option value="role-playing-games-rpg">RPG</option>
-                        <option value="shooter">Nişancı</option>
+                        <option value="shooter">FPS/Nişancı</option>
+                        <option value="indie">Bağımsız</option>
                         <option value="adventure">Macera</option>
                         <option value="strategy">Strateji</option>
-                        <option value="indie">Bağımsız (Indie)</option>
-                        <option value="sports">Spor</option>
-                        <option value="racing">Yarış</option>
                     </select>
-
                     <select id="year-select">
                         <option value="">Tüm Yıllar</option>
-                        <option value="2020,2026">2020 ve Sonrası</option>
-                        <option value="2010,2019">2010 - 2019</option>
-                        <option value="2000,2009">2000 - 2009</option>
-                        <option value="1990,1999">90'lar Klasikleri</option>
+                        <option value="2020,2026">2020-2026</option>
+                        <option value="2015,2019">2015-2019</option>
+                        <option value="2010,2014">2010-2014</option>
+                        <option value="2000,2009">Retro (2000-2009)</option>
                     </select>
-
                     <select id="ordering-select">
-                        <option value="-added">En Popülerler</option>
-                        <option value="-metacritic">En Yüksek Puanlılar</option>
-                        <option value="-released">En Yeni Çıkanlar</option>
-                        <option value="released">Eski Topraklar</option>
+                        <option value="-added">Popüler</option>
+                        <option value="-metacritic">Yüksek Puan</option>
+                        <option value="-released">Yeni Çıkanlar</option>
                     </select>
                 </div>
-
                 <button id="spin-button" class="spin-btn">ÇEVİR</button>
             </div>
         </main>
     </div>
 
-    <div id="game-modal" class="modal">
+    <div id="game-modal" class="modal" style="display:none;">
         <div id="modal-body"></div>
     </div>
 
-    <script src="sounds.js"></script>
+    <script src="config.js"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
