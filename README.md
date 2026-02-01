@@ -1,20 +1,22 @@
-🎡 Oyun Karar Çarkı (Game Decision Wheel)
+🎡 Oyun Seçmek, Dünyanın En Zor Şeyi Olabilir!
+Binlerce seçenek arasında kaybolup gitmek yerine, karar verme sürecini şans ve eğlencenin iç içe geçtiği galaktik bir yolculuğa dönüştürmeye ne dersiniz?
 
-
-
-Kararsız oyuncular için geliştirilmiş, modern ve dinamik bir oyun seçim platformu. **RAWG API** gücüyle binlerce oyun arasından seçim yapar ve size özel detayları sunar.
+Elite Game Picker, o meşhur "Ne oynasam?" çıkmazına son vermek için tasarlandı. Sizin için sadece bir oyun seçmiyor; neon ışıklar, hareketli bulutsular  eşliğinde size yeni favori oyununuzu takdim ediyor. Artık kütüphanenize bakıp iç çekmek yok; çarkı çevirin ve kaderinizdeki oyunu keşfedin!
 
 
 
  📸 Ekran Görüntüleri
 
 Burada uygulamanın nasıl göründüğüne dair görseller yer almaktadır:
+
 | 1. Ana Ekran (Çark)
-<img width="1918" height="882" alt="Ekran görüntüsü 2026-01-31 212845" src="https://github.com/user-attachments/assets/f052439b-c354-4b85-a788-1ac69933bf04" />
+<img width="1868" height="922" alt="image" src="https://github.com/user-attachments/assets/0b7479cb-1fa3-4ea2-baa3-4c9a191e7525" />
+
 | 2.İntro 
 <img width="1918" height="887" alt="a" src="https://github.com/user-attachments/assets/bb95be62-fef4-4521-b60c-aef5ebaf6906" />
+
 3. Oyun Detay Kartı |
-<img width="1918" height="925" alt="Ekran görüntüsü 2026-01-31 212831" src="https://github.com/user-attachments/assets/3912ac98-b7a4-4f13-8b14-386bc9904680" />
+<img width="1918" height="927" alt="image" src="https://github.com/user-attachments/assets/983888e4-f104-4512-b490-fe74afa23067" />
 
 
 
